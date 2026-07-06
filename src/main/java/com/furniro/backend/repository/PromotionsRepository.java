@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface PromotionsRepository extends JpaRepository<Promotion, UUID> {
+public interface PromotionsRepository extends JpaRepository<Promotion, Long> {
 }
