@@ -1,0 +1,9 @@
+CREATE TABLE carts (
+   id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+   user_id    BIGINT      NOT NULL UNIQUE,
+   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+   CONSTRAINT fk_carts_user
+       FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
