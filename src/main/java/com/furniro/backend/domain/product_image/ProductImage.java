@@ -22,7 +22,7 @@ public class ProductImage {
     private Long id;
 
     private String url;
-
+    private Integer position;
     @CreationTimestamp
     private Instant createdAt;
 

@@ -12,7 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 
-@Table(name = "cart_item")
+@Table(name = "cart_items")
 @Entity
 @Getter
 @Setter
