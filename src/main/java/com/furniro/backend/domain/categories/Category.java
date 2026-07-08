@@ -21,7 +21,7 @@ public class Category {
     private Long id;
     private String name;
     private String description;
-    private String imgUrl;
+    private String imageUrl;
 
     @CreationTimestamp
     private Instant createdAt;
