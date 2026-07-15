@@ -3,6 +3,7 @@ package com.furniro.backend.service;
 
 import com.furniro.backend.domain.products.Product;
 import com.furniro.backend.domain.products.ProductResponseDTO;
+import com.furniro.backend.exception.ResourceNotFoundException;
 import com.furniro.backend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,8 +40,7 @@ public class ProductService {
 
     public ProductResponseDTO getProduct(Long id){
         Product product = productRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Product Not Found"));
-
+                .orElseThrow(()-> new ResourceNotFoundException("Product Not Found with id: " + id));
         return mapToDTO(product);
     }
 }
