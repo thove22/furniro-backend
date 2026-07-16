@@ -43,4 +43,13 @@ public class ProductService {
                 .orElseThrow(()-> new ResourceNotFoundException("Product Not Found with id: " + id));
         return mapToDTO(product);
     }
+    public List<ProductResponseDTO>getRelatedProducts(Long id){
+        Product product = productRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Product Not Found with id: " + id));
+
+        Pageable limit = PageRequest.of(0, 4);
+        List<Product> related = productRepository.findRelatedProducts(product.getCategory().getId(),
+                id, limit);
+        return related.stream().map(this::mapToDTO).toList();
+    }
 }

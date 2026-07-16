@@ -31,4 +31,10 @@ public class ProductController {
         ProductResponseDTO product = this.productService.getProduct(id);
         return ResponseEntity.ok(product);
     }
+
+    @GetMapping("/{id}/related")
+    public ResponseEntity<List<ProductResponseDTO>> getRelatedProducts(@PathVariable Long id ){
+        List<ProductResponseDTO> related = this.productService.getRelatedProducts(id);
+        return ResponseEntity.ok(related);
+    }
 }
