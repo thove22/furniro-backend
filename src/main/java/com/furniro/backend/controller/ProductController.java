@@ -6,10 +6,7 @@ import com.furniro.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,5 +24,17 @@ public class ProductController {
 
     Page<ProductResponseDTO> allProducts = this.productService.getAllProducts(page,size);
     return ResponseEntity.ok(allProducts);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable Long id ){
+        ProductResponseDTO product = this.productService.getProduct(id);
+        return ResponseEntity.ok(product);
+    }
+
+    @GetMapping("/{id}/related")
+    public ResponseEntity<List<ProductResponseDTO>> getRelatedProducts(@PathVariable Long id ){
+        List<ProductResponseDTO> related = this.productService.getRelatedProducts(id);
+        return ResponseEntity.ok(related);
     }
 }
