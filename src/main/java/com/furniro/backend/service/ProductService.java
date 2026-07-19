@@ -32,9 +32,7 @@ public class ProductService {
         );
     }
 
-    public Page<ProductResponseDTO> getAllProducts(int page, int size, Long categoryId){
-
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<ProductResponseDTO> getAllProducts(Pageable pageable, Long categoryId){
 
         if(categoryId != null){
             Page<Product> productPageCategory = this.productRepository.findAllByCategory(categoryId, pageable);

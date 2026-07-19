@@ -5,6 +5,7 @@ import com.furniro.backend.domain.products.ProductResponseDTO;
 import com.furniro.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +19,9 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public ResponseEntity<Page<ProductResponseDTO>> getProducts(@RequestParam(defaultValue = "0") int page,
-                                                                @RequestParam(defaultValue = "10") int size,
+    public ResponseEntity<Page<ProductResponseDTO>> getProducts(Pageable pageable,
                                                                 @RequestParam(required = false) Long categoryId){
-    Page<ProductResponseDTO> allProducts = this.productService.getAllProducts(page,size, categoryId);
+    Page<ProductResponseDTO> allProducts = this.productService.getAllProducts(pageable, categoryId);
     return ResponseEntity.ok(allProducts);
     }
 
