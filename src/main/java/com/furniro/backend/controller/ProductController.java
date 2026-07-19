@@ -19,10 +19,9 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<Page<ProductResponseDTO>> getProducts(@RequestParam(defaultValue = "0") int page,
-                                                                @RequestParam(defaultValue = "10") int size)
-    {
-
-    Page<ProductResponseDTO> allProducts = this.productService.getAllProducts(page,size);
+                                                                @RequestParam(defaultValue = "10") int size,
+                                                                @RequestParam(required = false) Long categoryId){
+    Page<ProductResponseDTO> allProducts = this.productService.getAllProducts(page,size, categoryId);
     return ResponseEntity.ok(allProducts);
     }
 

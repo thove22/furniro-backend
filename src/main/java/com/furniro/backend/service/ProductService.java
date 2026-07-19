@@ -32,10 +32,18 @@ public class ProductService {
         );
     }
 
-    public Page<ProductResponseDTO> getAllProducts(int page, int size){
+    public Page<ProductResponseDTO> getAllProducts(int page, int size, Long categoryId){
+
         Pageable pageable = PageRequest.of(page, size);
-        Page<Product> productPage = this.productRepository.findAllAvailable(pageable);
-        return productPage.map(this::mapToDTO);
+
+        if(categoryId != null){
+            Page<Product> productPageCategory = this.productRepository.findAllByCategory(categoryId, pageable);
+            return productPageCategory.map(this::mapToDTO);
+        }else {
+            Page<Product> productPage = this.productRepository.findAllAvailable(pageable);
+            return productPage.map(this::mapToDTO);
+        }
+
     }
 
     public ProductResponseDTO getProduct(Long id){
