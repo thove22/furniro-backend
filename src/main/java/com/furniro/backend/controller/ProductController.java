@@ -5,9 +5,11 @@ import com.furniro.backend.domain.products.ProductResponseDTO;
 import com.furniro.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -18,11 +20,12 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public ResponseEntity<Page<ProductResponseDTO>> getProducts(@RequestParam(defaultValue = "0") int page,
-                                                                @RequestParam(defaultValue = "10") int size)
-    {
-
-    Page<ProductResponseDTO> allProducts = this.productService.getAllProducts(page,size);
+    public ResponseEntity<Page<ProductResponseDTO>> getProducts(Pageable pageable,
+                                                                @RequestParam(required = false) Long categoryId,
+                                                                @RequestParam(required = false) String search,
+                                                                @RequestParam(required = false) BigDecimal minPrice,
+                                                                @RequestParam(required = false) BigDecimal maxPrice){
+    Page<ProductResponseDTO> allProducts = this.productService.getAllProducts(pageable, categoryId, search, minPrice, maxPrice);
     return ResponseEntity.ok(allProducts);
     }
 
