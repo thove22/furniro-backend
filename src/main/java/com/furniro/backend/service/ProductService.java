@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -32,10 +33,15 @@ public class ProductService {
         );
     }
 
-    public Page<ProductResponseDTO> getAllProducts(Pageable pageable, Long categoryId){
+    public Page<ProductResponseDTO> getAllProducts(Pageable pageable, Long categoryId,
+                                    String search, BigDecimal minPrice,
+                                                   BigDecimal maxPrice){
 
-        if(categoryId != null){
-            Page<Product> productPageCategory = this.productRepository.findAllByCategory(categoryId, pageable);
+        String searchPattern = search != null ? "%" + search + "%" : null;
+
+        if(categoryId != null || searchPattern != null || minPrice != null || maxPrice != null){
+            Page<Product> productPageCategory = this.productRepository.findFilteredProducts(categoryId,
+                    searchPattern, minPrice, maxPrice, pageable);
             return productPageCategory.map(this::mapToDTO);
         }else {
             Page<Product> productPage = this.productRepository.findAllAvailable(pageable);

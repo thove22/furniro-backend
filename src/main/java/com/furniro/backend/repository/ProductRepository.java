@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -19,9 +20,17 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                       @Param("productId") Long productId,
                                       Pageable pageable);
 
-    @Query("Select p From Product p Where p.category.id = :categoryId AND p.stock > 0")
-    Page<Product> findAllByCategory(@Param("categoryId") Long categoryId,
-                                    Pageable pageable);
+
+    @Query("Select p From Product p Where p.stock > 0 " +
+            " AND  (:categoryId IS NULL OR p.category.id = :categoryId)" +
+            " AND (:search IS NULL OR lower(p.name) LIKE LOWER(CAST(:search AS string)))" +
+            " AND (:minPrice IS NULL OR p.price >= :minPrice)" +
+            " AND (:maxPrice IS NULL OR p.price <= :maxPrice)")
+    Page<Product> findFilteredProducts(@Param("categoryId") Long categoryId,
+                                       @Param("search") String search,
+                                       @Param("minPrice") BigDecimal minPrice,
+                                       @Param("maxPrice") BigDecimal maxPrice,
+                                       Pageable pageable);
 
 
 }
