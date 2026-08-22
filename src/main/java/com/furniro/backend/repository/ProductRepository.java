@@ -20,7 +20,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                       @Param("productId") Long productId,
                                       Pageable pageable);
 
-
     @Query("Select p From Product p Where p.stock > 0 " +
             " AND  (:categoryId IS NULL OR p.category.id = :categoryId)" +
             " AND (:search IS NULL OR lower(p.name) LIKE LOWER(CAST(:search AS string)))" +
