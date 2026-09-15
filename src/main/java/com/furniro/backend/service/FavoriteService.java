@@ -12,6 +12,7 @@ import com.furniro.backend.repository.FavoriteRepository;
 import com.furniro.backend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -57,6 +58,12 @@ public class FavoriteService {
         favorite.setProduct(product);
         favorite.setUser(user);
         repository.save(favorite);
+    }
+
+    @Transactional
+    public void removeFavorite(User user, Long productId){
+       repository.deleteByUserIdAndProductId(user.getId(),
+               productId);
     }
 
 }
