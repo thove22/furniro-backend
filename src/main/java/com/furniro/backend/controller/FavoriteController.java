@@ -1,6 +1,5 @@
 package com.furniro.backend.controller;
 
-import com.furniro.backend.domain.favorites.Favorite;
 import com.furniro.backend.domain.favorites.FavoriteRequestDTO;
 import com.furniro.backend.domain.favorites.FavoriteResponseDTO;
 import com.furniro.backend.domain.users.User;
@@ -34,6 +33,15 @@ public class FavoriteController {
     ){
             this.service.favoriteProduct(user, request);
             return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> removeFavorite(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long productId
+    ){
+        this.service.removeFavorite(user, productId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
