@@ -11,4 +11,8 @@ import java.util.List;
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     @Query("Select f from Favorite f WHERE f.user.id = :userId")
     List<Favorite> findByUserId(@Param("userId") Long userId);
+
+    boolean existsByUserIdAndProductId(Long userId, Long productId);
+
+    void deleteByUserIdAndProductId(Long userId, Long productId);
 }
