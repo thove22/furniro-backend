@@ -1,5 +1,6 @@
 package com.furniro.backend.domain.cart;
 
+import com.furniro.backend.domain.cart_item.CartItem;
 import com.furniro.backend.domain.users.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "carts")
 @Entity
@@ -28,7 +31,10 @@ public class Cart {
     @UpdateTimestamp
     private Instant updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true) //why?
     private User user;
+
+   @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+   private List<CartItem> items = new ArrayList<>();
 }
