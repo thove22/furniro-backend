@@ -91,4 +91,23 @@ public class CartService {
 
             return getCart(user);
     }
+
+    public CartResponseDTO updateItemQuantity(User user, Long itemId, Integer quantity){
+        if(quantity == null || quantity <= 0){
+            throw new IllegalArgumentException("Quantity must be posetive");
+        }
+
+        CartItem item = cartItemRepository.findById(itemId).orElseThrow(
+                ()-> new ResourceNotFoundException("Card item not found "+ itemId)
+        );
+
+        if(!item.getCart().getUser().getId().equals(user.getId())){
+            throw new ResourceNotFoundException("Card Item not found: " + itemId);
+        }
+
+        item.setQuantity(quantity);
+        cartItemRepository.save(item);
+
+        return getCart(user);
+    }
 }
