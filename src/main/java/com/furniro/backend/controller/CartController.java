@@ -2,6 +2,7 @@ package com.furniro.backend.controller;
 
 import com.furniro.backend.domain.cart.CartResponseDTO;
 import com.furniro.backend.domain.cart_item.CartItemRequestDTO;
+import com.furniro.backend.domain.cart_item.UpdateQuantityRequest;
 import com.furniro.backend.domain.users.User;
 import com.furniro.backend.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +24,22 @@ public class CartController {
        return ResponseEntity.ok(cart);
     }
 
-    @PostMapping
+    @PostMapping("/items")
     public ResponseEntity<CartResponseDTO> addCart(
             @AuthenticationPrincipal User user,
             @RequestBody CartItemRequestDTO cartItemRequestDTO
             ){
             CartResponseDTO cart = cartService.addItem(user, cartItemRequestDTO);
             return ResponseEntity.ok(cart);
+    }
+
+    @PatchMapping("/items/{itemId}")
+    public ResponseEntity<CartResponseDTO> updateQuantity(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long itemId,
+            @RequestBody UpdateQuantityRequest quantityRequest
+            ){
+        CartResponseDTO cart = cartService.updateItemQuantity(user, itemId, quantityRequest.quantity());
+        return  ResponseEntity.ok(cart);
     }
 }
