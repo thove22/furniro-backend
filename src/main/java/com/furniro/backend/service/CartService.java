@@ -2,11 +2,15 @@ package com.furniro.backend.service;
 
 import com.furniro.backend.domain.cart.Cart;
 import com.furniro.backend.domain.cart.CartResponseDTO;
+import com.furniro.backend.domain.cart_item.CartItem;
 import com.furniro.backend.domain.cart_item.CartItemRequestDTO;
 import com.furniro.backend.domain.cart_item.CartItemResponseDTO;
+import com.furniro.backend.domain.products.Product;
 import com.furniro.backend.domain.users.User;
+import com.furniro.backend.exception.ResourceNotFoundException;
 import com.furniro.backend.repository.CartItemRepository;
 import com.furniro.backend.repository.CartRepository;
+import com.furniro.backend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +26,9 @@ public class CartService {
 
     @Autowired
     private CartItemRepository cartItemRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     public Cart getOrCreateCart(User user){
         Optional<Cart> cart =  cartRepository.findByUserId(user.getId());
@@ -58,5 +65,30 @@ public class CartService {
                 .map(CartItemResponseDTO::linetotal)
                  .reduce(BigDecimal.ZERO, BigDecimal::add);
                 return new CartResponseDTO(cart.getId(), items, total);
+    }
+
+    public CartResponseDTO addItem(User user, CartItemRequestDTO requestDTO){
+
+            Cart cart =  getOrCreateCart(user);
+            Product product = productRepository.findById(requestDTO.productId()).
+                    orElseThrow(()-> new ResourceNotFoundException(
+                            "Product not found with id: " + requestDTO.productId()
+            ));
+
+           Optional<CartItem> existing = cartItemRepository.findByCartIdAndProductId(cart.getId(), product.getId());
+
+            if(existing.isPresent()){
+                CartItem item = existing.get();
+                item.setQuantity(item.getQuantity() + requestDTO.quantity());
+                cartItemRepository.save(item);
+            }else{
+                CartItem item = new CartItem();
+                item.setCart(cart);
+                item.setProduct(product);
+                item.setQuantity(requestDTO.quantity());
+                cartItemRepository.save(item);
+            }
+
+            return getCart(user);
     }
 }
