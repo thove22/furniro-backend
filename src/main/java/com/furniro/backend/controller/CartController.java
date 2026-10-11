@@ -42,4 +42,13 @@ public class CartController {
         CartResponseDTO cart = cartService.updateItemQuantity(user, itemId, quantityRequest.quantity());
         return  ResponseEntity.ok(cart);
     }
+
+    @DeleteMapping("/items/{itemId}")
+    public ResponseEntity<CartResponseDTO> removeItem(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long itemId
+    ){
+        CartResponseDTO cart = cartService.removeItem(user, itemId);
+        return  ResponseEntity.ok(cart);
+    }
 }
