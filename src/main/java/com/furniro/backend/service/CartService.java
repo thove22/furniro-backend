@@ -13,6 +13,7 @@ import com.furniro.backend.repository.CartRepository;
 import com.furniro.backend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -108,6 +109,19 @@ public class CartService {
         item.setQuantity(quantity);
         cartItemRepository.save(item);
 
+        return getCart(user);
+    }
+
+    @Transactional
+    public CartResponseDTO removeItem(User user, Long itemId){
+        CartItem item = cartItemRepository.findById(itemId).orElseThrow(
+                ()-> new ResourceNotFoundException("Cart item not found " + itemId)
+        );
+        if(!item.getCart().getUser().getId().equals(user.getId())){
+            throw new ResourceNotFoundException("Cart Item not found: "+ itemId);
+        }
+
+        cartItemRepository.delete(item);
         return getCart(user);
     }
 }
